@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Сосновый берег — бронирование домиков</title>
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <h1>Сосновый берег</h1>
+    <p class="tagline">Учебное бронирование домиков у озера</p>
+    <p id="demo-note" class="demo-note">Учебное демо: бронирования сохраняются только в этом браузере</p>
+  </header>
+
+  <form id="filters" class="filters">
+    <fieldset>
+      <legend>Фильтры</legend>
+
+      <label for="filter-guests">Число гостей</label>
+      <select id="filter-guests" name="guests">
+        <option value="0">Любое число гостей</option>
+        <option value="1">1 гость</option>
+        <option value="2">2 гостя</option>
+        <option value="3">3 гостя</option>
+        <option value="4">4 гостя</option>
+        <option value="5">5 гостей</option>
+        <option value="6">6 гостей</option>
+      </select>
+
+      <label for="filter-price">Максимальная цена за ночь</label>
+      <input id="filter-price" name="maxPrice" type="number" min="0" step="500" placeholder="Например, 8000">
+
+      <button id="filter-reset" type="button">Сбросить фильтры</button>
+    </fieldset>
+  </form>
+
+  <p id="filters-empty" class="notice" hidden></p>
+  <p id="selection-notice" class="notice" aria-live="polite"></p>
+
+  <main class="layout">
+    <section class="scheme-wrap" aria-label="Схема посёлка">
+      <h2>Схема посёлка</h2>
+      <div id="scheme" class="scheme" role="group" aria-label="Схема посёлка: кнопки домов"></div>
+    </section>
+
+    <aside id="card" class="card" aria-label="Карточка выбранного дома">
+      <h2>Выбранный дом</h2>
+      <p>Выберите свободный дом на схеме или в списке</p>
+    </aside>
+
+    <section class="list-wrap" aria-label="Список домов">
+      <h2>Список домов</h2>
+      <div id="house-list" class="house-list" aria-label="Дома: список"></div>
+    </section>
+  </main>
+
+  <section id="my-bookings" aria-label="Мои брони">
+    <h2>Мои брони</h2>
+    <div id="bookings-list" aria-live="polite"></div>
+    <button id="reset-demo" type="button">Сбросить демо</button>
+  </section>
+
+  <footer class="site-footer">
+    <p>Учебный проект «Сосновый берег», 2026. Сделано в учебных целях.</p>
+    <p>Учебное демо, реальная бронь не оформляется</p>
+  </footer>
+
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>
