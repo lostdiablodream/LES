@@ -1,0 +1,895 @@
+/* «Сосновый берег» — оформление по дизайн-контракту (design-skills):
+   домен — база отдыха у озера (сосновая хвоя, кора, вода, янтарь костра);
+   глубина — одна стратегия: мягкие слоистые тени для карточек,
+   рамки только у элементов внутри них; заголовки — рукописная Neucha
+   (вывески турбазы, самохостинг в ./fonts), текст и данные — sans;
+   числа — tabular-nums; один акцент — янтарь. */
+
+@font-face {
+  font-family: "Neucha";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/neucha-cyrillic.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: "Neucha";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/neucha-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+    U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+    U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  --color-bg: #f5f1e6;
+  --color-surface: #ffffff;
+  --color-surface-warm: #fffdf7;
+  --color-primary: #2f5d40;
+  --color-primary-dark: #234732;
+  --color-pine-deep: #1d3a29;
+  --color-accent: #d2a24e;
+  --color-accent-soft: #f7ecd6;
+  --color-text: #28332b;
+  --color-muted: #6d7568;
+  --color-danger: #b3382e;
+  --color-border: #d8ded0;
+  --color-border-strong: #b9c2ac;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow: 0 1px 2px rgba(35, 71, 50, 0.06), 0 4px 14px rgba(35, 71, 50, 0.08);
+  --font-display: "Neucha", Georgia, "Nimbus Roman", "Times New Roman", serif;
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --duration-fast: 150ms;
+  --ease: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+::selection {
+  background: rgba(210, 162, 78, 0.45);
+  color: var(--color-text);
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  line-height: 1.5;
+  color: var(--color-text);
+  background:
+    radial-gradient(90% 320px at 50% -120px, rgba(210, 162, 78, 0.10), transparent 70%),
+    var(--color-bg);
+}
+
+h1,
+h2,
+.filters legend,
+.card__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: 2.9rem;
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: 1.6rem;
+  line-height: 1.2;
+  color: var(--color-primary-dark);
+}
+
+/* Шапка: глубокая хвоя + кромка сосен по нижнему краю (фирменный мотив). */
+.site-header {
+  position: relative;
+  padding: 34px 16px 40px;
+  text-align: center;
+  color: #ffffff;
+  background: linear-gradient(180deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+}
+
+.site-header::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 20px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='20' viewBox='0 0 160 20'%3E%3Cg fill='%231d3a29'%3E%3Cpath d='M0 20 L7 3 L14 20 Z'/%3E%3Cpath d='M12 20 L20 6 L28 20 Z'/%3E%3Cpath d='M26 20 L33 0 L40 20 Z'/%3E%3Cpath d='M38 20 L46 7 L54 20 Z'/%3E%3Cpath d='M52 20 L59 1 L66 20 Z'/%3E%3Cpath d='M64 20 L72 8 L80 20 Z'/%3E%3Cpath d='M78 20 L85 3 L92 20 Z'/%3E%3Cpath d='M90 20 L98 6 L106 20 Z'/%3E%3Cpath d='M104 20 L111 0 L118 20 Z'/%3E%3Cpath d='M116 20 L124 7 L132 20 Z'/%3E%3Cpath d='M130 20 L137 2 L144 20 Z'/%3E%3Cpath d='M142 20 L150 5 L158 20 Z'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: bottom center;
+  background-size: auto 100%;
+  pointer-events: none;
+}
+
+.tagline {
+  margin-top: 6px;
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.demo-note {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 8px 16px;
+  border: 1px solid rgba(35, 71, 50, 0.35);
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: var(--color-text);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.demo-note:empty {
+  display: none;
+}
+
+.filters,
+.notice,
+.layout,
+#my-bookings {
+  width: min(1100px, 100% - 32px);
+  margin-inline: auto;
+}
+
+/* Фильтры — карточка-панель, как и остальные секции.
+   Grid-раскладка: подписи в первой строке, контролы под ними —
+   длинные подписи не переносятся и не ломают ряд. */
+/* Legend позиционируется абсолютно в верхнем поле карточки — так он
+   покидает «рамочное» положение fieldset (в нём он залезал на край). */
+.filters fieldset {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  align-items: end;
+  gap: 6px 16px;
+  margin: 0;
+  padding: 52px 20px 20px;
+  background: var(--color-surface);
+  border: 0;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.filters legend {
+  position: absolute;
+  top: 12px;
+  left: 20px;
+  padding: 0;
+  font-size: 1.45rem;
+  font-weight: 400;
+  color: var(--color-primary-dark);
+}
+
+.filters label {
+  display: block;
+  grid-row: 1;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.filters select,
+.filters input {
+  grid-row: 2;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  font: inherit;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  transition: border-color var(--duration-fast) var(--ease),
+    box-shadow var(--duration-fast) var(--ease);
+}
+
+.filters select {
+  grid-column: 1;
+}
+
+.filters input {
+  grid-column: 2;
+}
+
+.filters button {
+  grid-row: 2;
+  grid-column: 3;
+  white-space: nowrap;
+}
+
+.filters select:focus,
+.filters input:focus {
+  border-color: var(--color-primary);
+}
+
+button {
+  min-height: 44px;
+  padding: 10px 16px;
+  font: inherit;
+  color: #ffffff;
+  background: var(--color-primary);
+  border: 0;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--duration-fast) var(--ease);
+}
+
+button:hover {
+  background: var(--color-primary-dark);
+}
+
+button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* T-28: заблокированная кнопка (идёт обработка нажатия) приглушена. */
+button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* «Сбросить демо» — вторичная кнопка, чтобы не конкурировать с главной. */
+#reset-demo {
+  color: var(--color-primary-dark);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+}
+
+#reset-demo:hover {
+  background: var(--color-accent-soft);
+  border-color: var(--color-accent);
+}
+
+.notice {
+  padding: 12px 16px;
+  background: var(--color-accent-soft);
+  border: 1px solid var(--color-accent);
+  border-left: 4px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+}
+
+.notice[hidden],
+.notice:empty {
+  display: none;
+}
+
+.layout {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.scheme-wrap,
+.card,
+.list-wrap,
+#my-bookings {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+#my-bookings button {
+  align-self: flex-start;
+}
+
+.site-footer {
+  padding: 18px 16px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.85);
+  background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-pine-deep) 100%);
+}
+
+.site-footer p + p {
+  margin-top: 4px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.house-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.house-item {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  text-align: left;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease),
+    border-color var(--duration-fast) var(--ease);
+}
+
+.house-item:hover {
+  background: var(--color-accent-soft);
+  border-color: var(--color-accent);
+}
+
+.house-item__name {
+  margin-right: 8px;
+  font-weight: 700;
+}
+
+.house-item__meta {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text);
+  background: var(--color-accent-soft);
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.house-list__empty {
+  color: var(--color-muted);
+}
+
+/* Схема посёлка: лужайка с полосами стрижки и солнечным пятном. */
+.scheme {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background:
+    radial-gradient(55% 42% at 84% 8%, rgba(255, 243, 205, 0.6), rgba(255, 243, 205, 0) 70%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0 26px, rgba(255, 255, 255, 0) 26px 52px),
+    linear-gradient(180deg, #aed49f 0%, #97c787 55%, #89bd7b 100%);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius);
+}
+
+.scheme__decor {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.scheme__road {
+  position: absolute;
+  top: 14%;
+  left: 0;
+  width: 100%;
+  height: 11%;
+  background: linear-gradient(180deg, #a3a39c 0%, #85857e 50%, #a3a39c 100%);
+  border-top: 2px solid #70706a;
+  border-bottom: 2px solid #70706a;
+}
+
+.scheme__road::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  transform: translateY(-50%);
+  background: repeating-linear-gradient(90deg, #f2e9c9 0 24px, transparent 24px 48px);
+}
+
+/* Озеро: песчаная отмель по краю (тень следует форме border-radius),
+   внутри — глубина и лёгкая рябь. */
+.scheme__lake {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  bottom: 3%;
+  height: 26%;
+  background: linear-gradient(180deg, #8ec4e4 0%, #4f8fbf 85%);
+  border-radius: 48% 52% 42% 58% / 62% 56% 44% 38%;
+  box-shadow:
+    0 0 0 5px #e6d9b0,
+    inset 0 -10px 16px rgba(23, 68, 105, 0.28);
+}
+
+.scheme__lake::after {
+  content: "";
+  position: absolute;
+  inset: 10% 7%;
+  border-radius: inherit;
+  background: repeating-linear-gradient(-6deg, transparent 0 14px, rgba(255, 255, 255, 0.12) 14px 16px);
+}
+
+/* Деревья — силуэты сосен (двухъярусная крона со стволом), а не кружки. */
+.scheme__tree {
+  position: absolute;
+  width: 5%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(180deg, #4d7c4a 0%, var(--color-primary) 78%);
+  clip-path: polygon(50% 0, 82% 34%, 66% 34%, 88% 62%, 58% 62%, 58% 84%, 42% 84%, 42% 62%, 12% 62%, 34% 34%, 18% 34%);
+  filter: drop-shadow(1px 2px 2px rgba(20, 40, 25, 0.28));
+}
+
+.scheme__caption-road,
+.scheme__caption-lake {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-size: 0.75rem;
+  font-style: italic;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.85);
+  pointer-events: none;
+}
+
+/* Подпись «дорога» — на полотне, но ниже пунктира разметки. */
+.scheme__caption-road {
+  left: 10%;
+  top: 23%;
+}
+
+.scheme__caption-lake {
+  left: 50%;
+  top: 85%;
+}
+
+.scheme__empty {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 24px;
+  text-align: center;
+  color: var(--color-muted);
+  background: rgba(245, 241, 230, 0.55);
+}
+
+/* Кнопки домов компактные: координаты в data.js заданы в процентах,
+   крупные карточки накладывались друг на друга. Выбранный дом — над соседями,
+   наведённый — ещё выше. */
+.scheme-house {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  min-width: 56px;
+  padding: 4px 6px;
+  color: var(--color-text);
+  background: var(--color-surface-warm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  transition: background-color var(--duration-fast) var(--ease),
+    border-color var(--duration-fast) var(--ease),
+    box-shadow var(--duration-fast) var(--ease),
+    transform var(--duration-fast) var(--ease);
+}
+
+.scheme-house:hover {
+  z-index: 3;
+  background: var(--color-accent-soft);
+  border-color: var(--color-accent);
+  box-shadow: 0 6px 16px rgba(35, 71, 50, 0.28);
+  transform: translate(-50%, -50%) translateY(-2px);
+}
+
+.scheme-house__icon {
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.scheme-house__label {
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* На схеме бейджи компактнее, чем в списке. */
+.scheme-house .badge {
+  padding: 1px 6px;
+  font-size: 9.5px;
+}
+
+/* T-13: статусы различимы не только цветом — у бейджей маркеры,
+   у выбранных/занятых домов — рамки и приглушённость. */
+.badge--free {
+  color: #ffffff;
+  background: var(--color-primary);
+}
+
+.badge--free::before {
+  content: "● ";
+}
+
+.badge--selected {
+  color: var(--color-text);
+  background: var(--color-accent);
+  font-weight: 700;
+}
+
+.badge--selected::before {
+  content: "▶ ";
+}
+
+.badge--occupied {
+  color: #ffffff;
+  background: var(--color-muted);
+}
+
+.badge--occupied::before {
+  content: "🔒 ";
+}
+
+.house-item--selected {
+  background: var(--color-accent-soft);
+  border: 2px solid var(--color-primary);
+}
+
+.house-item--occupied {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.house-item--occupied:hover {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+.scheme-house--selected {
+  z-index: 2;
+  border: 3px solid var(--color-accent);
+  box-shadow: 0 6px 18px rgba(35, 71, 50, 0.35);
+}
+
+.scheme-house--occupied {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.scheme-house--occupied:hover {
+  background: var(--color-surface-warm);
+  border-color: var(--color-border);
+  box-shadow: var(--shadow);
+  transform: translate(-50%, -50%);
+}
+
+.scheme-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  font-size: 0.85rem;
+}
+
+.scheme-legend__title {
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.scheme-legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* T-23: содержимое карточки выбранного дома. */
+.card__title {
+  margin: 0;
+}
+
+.card__description {
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+.card__facts {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 20px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Пустое состояние карточки приглушено, чтобы отличаться от выбранного. */
+.card__placeholder {
+  color: var(--color-muted);
+}
+
+/* T-24: форма бронирования внутри карточки выбранного дома. */
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border);
+}
+
+/* Подписи полей — в том же стиле, что и подписи фильтров. */
+.booking-form label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.booking-form input {
+  min-height: 44px;
+  padding: 10px 12px;
+  font: inherit;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  transition: border-color var(--duration-fast) var(--ease);
+}
+
+.booking-form input:focus {
+  border-color: var(--color-primary);
+}
+
+.field-error {
+  font-size: 0.9rem;
+  color: var(--color-danger);
+}
+
+/* Пустой контейнер ошибки не занимает место. */
+.field-error:empty {
+  display: none;
+}
+
+/* T-26: поле с ошибкой подсвечивается рамкой и обводкой цвета опасности. */
+input[aria-invalid="true"] {
+  border-color: var(--color-danger);
+  outline-color: var(--color-danger);
+}
+
+.booking-total {
+  margin: 0;
+  font-size: 1.1rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.booking-total strong {
+  color: var(--color-primary-dark);
+}
+
+/* T-30: раздел «Мои брони» — записи карточками, новые сверху. */
+.bookings {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0;
+  list-style: none;
+}
+
+.booking-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+}
+
+/* Первая строка карточки: id, дом и дата на одной линии, дата прижата вправо. */
+.booking-card__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+}
+
+.booking-card__id {
+  color: var(--color-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.booking-card__house {
+  font-weight: 600;
+}
+
+.booking-card__date {
+  margin-left: auto;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.booking-card__details {
+  color: var(--color-text);
+}
+
+.booking-card__total {
+  font-size: 1.1rem;
+  color: var(--color-primary-dark);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Пустой контейнер действий (под кнопку отмены, T-31) не занимает место. */
+.booking-card__actions:empty {
+  display: none;
+}
+
+.bookings-empty {
+  color: var(--color-muted);
+}
+
+/* T-31: кнопка отмены брони — компактная опасность: прозрачный фон, рамка
+   и текст цвета danger; при наведении — заливка danger с белым текстом. */
+.booking-cancel {
+  min-height: 0;
+  padding: 6px 12px;
+  color: var(--color-danger);
+  background: transparent;
+  border: 1px solid var(--color-danger);
+  transition: background-color var(--duration-fast) var(--ease),
+    color var(--duration-fast) var(--ease);
+}
+
+.booking-cancel:hover {
+  color: #ffffff;
+  background: var(--color-danger);
+}
+
+/* T-37: адаптивная раскладка.
+   Десктоп (≥900px): схема и карточка в одну строку, список под ними
+   на всю ширину. Телефон (<900px): базовый flex-стек — схема → карточка →
+   список, порядок задан DOM. */
+@media (min-width: 900px) {
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(280px, 2fr);
+    grid-template-areas:
+      "scheme card"
+      "list list";
+    align-items: start;
+  }
+
+  .scheme-wrap {
+    grid-area: scheme;
+  }
+
+  .card {
+    grid-area: card;
+  }
+
+  .list-wrap {
+    grid-area: list;
+  }
+}
+
+/* Схема может сжиматься внутри grid/flex-контейнера и не создаёт
+   горизонтальный скролл (лейблы домов — nowrap). */
+.scheme {
+  min-width: 0;
+}
+
+@media (max-width: 600px) {
+  h1 {
+    font-size: 2.3rem;
+  }
+
+  /* Фильтры — в одну колонку по DOM-порядку: подпись над своим полем. */
+  .filters fieldset {
+    grid-template-columns: 1fr;
+  }
+
+  .filters legend,
+  .filters label,
+  .filters select,
+  .filters input,
+  .filters button {
+    grid-row: auto;
+    grid-column: auto;
+  }
+
+  /* Схема выше: больше вертикального места между домами. */
+  .scheme {
+    aspect-ratio: 16 / 12;
+  }
+
+  /* Домики максимально компактные; статус — маркером в углу карточки,
+     текст бейджа остаётся в списке и легенде. */
+  .scheme-house {
+    min-width: 0;
+    padding: 3px 5px;
+  }
+
+  .scheme-house__icon {
+    font-size: 14px;
+  }
+
+  .scheme-house__label {
+    font-size: 10px;
+  }
+
+  .scheme-house .badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    padding: 1px 3px;
+    font-size: 0;
+  }
+
+  .scheme-house .badge::before {
+    font-size: 9px;
+  }
+
+  /* Компактная кнопка отмены — минимально удобная высота для пальца. */
+  .booking-cancel {
+    min-height: 36px;
+  }
+}
+
+/* T-38: единый видимый фокус с клавиатуры для всех интерактивных элементов —
+   контур 3px accent со смещением 2px. Правило стоит в конце файла и поэтому
+   перекрывает базовое button:focus-visible (2px) выше: контур везде одинаков.
+   outline: none в стилях не используется, контур нигде не снимается. */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Кнопки домов при фокусе с клавиатуры дополнительно подсвечиваются лёгким
+   фоном accent-soft — как при наведении указателем. */
+.house-item:focus-visible,
+.scheme-house:focus-visible {
+  background: var(--color-accent-soft);
+}
+
+/* Уважение к prefers-reduced-motion: переходы и сдвиги отключаются. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .scheme-house:hover {
+    transform: translate(-50%, -50%);
+  }
+}
